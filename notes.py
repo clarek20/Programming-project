@@ -1,6 +1,6 @@
 import pandas as pd
 import requests, json
-import matplotlib.pyploy
+import matplotlib.pyplot
 from io import StringIO
 from pprint import pprint
 
