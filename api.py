@@ -8,6 +8,8 @@ def get_no_of_items_by_org(org, code):
     e.g 5.1 for Antibacterials. Will request the data in JSON format and return
     the data converted to a dictionary. Will return the total spend and total
     items prescribed for given months. 
+
+    Returns a dictionary of values
     """
     request_url = "https://openprescribing.net/api/1.0/spending_by_ccg/"
     params = {
@@ -74,7 +76,7 @@ def get_practice_info(query):
 def get_practice_prescriptions_by_time(practice, ccg='14L', bnf='5.1'):
     df = get_merged_dataframe(ccg, bnf)
     practice = get_practice_info(practice)['code']
-    filtered_df = df[df.row_id == practice]
+    filtered_df = df[df.row_id == practice].reset_index()
     return filtered_df
 
 def plot_practice_prescriptions_by_time(practice, ccg='14L', bnf='5.1'):
@@ -82,11 +84,16 @@ def plot_practice_prescriptions_by_time(practice, ccg='14L', bnf='5.1'):
     # Add function later to get name of bnf paragraph or section
     title = f"Number of prescriptions by {practice} over time"
     plot = df.plot(x = 'date', y = 'items', title=title)
+    plot.xaxis_date()
+    plot.xax
+    plot.xaxis.set_major_formatter(mdates.DateFormatter('%m %y'))
     return plot 
     
 
 def op_request_to_dataframe(dictionary):
     df = pd.DataFrame.from_dict(dictionary)
+    if 'date' in df.columns:
+        df['date'] = pd.to_datetime(df['date'])
     return df
 
 def plot_ccg_trends(df):
