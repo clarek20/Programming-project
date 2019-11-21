@@ -49,7 +49,6 @@ def get_merged_dataframe(org, code):
     n_items_df = op_request_to_dataframe(practice_no_of_items(org, code))
     list_size_df = op_request_to_dataframe(get_list_size(org))
     result = pd.merge(n_items_df, list_size_df)
-    result["items_per_patient"] = result["items"] / result["total_list_size"]
     return result
 
 def get_practice_info(query):
@@ -85,11 +84,11 @@ def plot_practice_prescriptions_by_time(practice, ccg='14L', bnf='5.1'):
     # Add function later to get name of bnf paragraph or section
     title = f"Number of prescriptions by {practice} over time"
     plot = df.plot(x = 'date', y = 'items', title=title)
-    plot.xaxis_date()
-    plot.xax
-    plot.xaxis.set_major_formatter(mdates.DateFormatter('%m %y'))
-    return plot 
-    
+    plot.xaxis.set_major_formatter(mdates.DateFormatter('%B %Y'))
+    return plot
+
+def month_practice_stats(practice, month, year, org = '14L'):
+    df = get
 
 def op_request_to_dataframe(dictionary):
     df = pd.DataFrame.from_dict(dictionary)
