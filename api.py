@@ -1,6 +1,8 @@
 import pandas as pd
 import requests, json
-import matplotlib.pyplot
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import seaborn as sns
 
 def get_no_of_items_by_org(org, code):
     """
@@ -72,6 +74,27 @@ def get_practice_info(query):
 
     return op_request_dict
 
+def get_ccg_info(query):
+    request_url = "https://openprescribing.net/api/1.0/org_code/"
+    # GET /api/1.0/org_details/?org_type=practice&org=99H&keys=total_list_size
+    params = {
+        "org_type": "ccg",
+        "q": query,
+        "format": "json"
+    }
+    op_request = requests.get(request_url, params=params)
+    op_request_dict = json.loads(op_request.text)
+    if len(op_request_dict) > 1:
+        print(f"The query returned more than 1 ccg, automatically choosing the first practice which is {op_request_dict[0]['name']}")
+        op_request_dict = op_request_dict[0]
+    elif len(op_request_dict) == 0:
+        raise Exception(f"Query {query} returned no results, perhaps the query was missspelled.")
+    else:
+        # if query only returns one result, return that result
+        op_request_dict = op_request_dict[0]
+
+    return op_request_dict
+
 
 def get_practice_prescriptions_by_time(practice, ccg='14L', bnf='5.1'):
     df = get_merged_dataframe(ccg, bnf)
@@ -99,3 +122,31 @@ def op_request_to_dataframe(dictionary):
 def plot_ccg_trends(df):
     plot = df.plot(x = 'date', y = 'items')
     return plot
+
+def get_heatmap_df(org, code, year):
+    # Get the dataframe 
+    df = get_merged_dataframe(org, code)
+    # Make a new column for the year from the date column
+    df['year'] = [d.year for d in df['date']]
+    # Make a new column for the month from the date column
+    df['month'] = [d.month for d in df['date']]
+    # Filter dataframe based on year
+    df = df[df.year == year]
+    # Make a new column normalising number of items prescribed for patient 
+    # numbers
+    df['items_per_patient'] = df['items'] / df['total_list_size']
+    # Pivot the dataframe to get it in a heatmappable 
+    df = df.pivot(index = "row_name", columns='month', values='items_per_patient')
+
+    return df
+
+def plot_heatmap(df, year):
+    fig, ax = plt.subplots(figsize=(10,30))  
+    plot = sns.heatmap(df, cmap="coolwarm", ax=ax, linewidths=.5)
+    ax.set_title(f"Heatmap of prescriptions normalised to patient numbers from practices in the Manchester CCG in {year}")
+    ax.set(ylabel = "Practice", xlabel = "Month")
+    return plot
+    
+
+
+
