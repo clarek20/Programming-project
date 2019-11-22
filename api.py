@@ -85,7 +85,27 @@ def get_ccg_info(query):
     op_request = requests.get(request_url, params=params)
     op_request_dict = json.loads(op_request.text)
     if len(op_request_dict) > 1:
-        print(f"The query returned more than 1 ccg, automatically choosing the first practice which is {op_request_dict[0]['name']}")
+        print(f"The query returned more than 1 ccg, automatically choosing the first ccg which is {op_request_dict[0]['name']}")
+        op_request_dict = op_request_dict[0]
+    elif len(op_request_dict) == 0:
+        raise Exception(f"Query {query} returned no results, perhaps the query was missspelled.")
+    else:
+        # if query only returns one result, return that result
+        op_request_dict = op_request_dict[0]
+
+    return op_request_dict
+
+def get_bnf_info(query):
+    request_url = "https://openprescribing.net/api/1.0/bnf_code/"
+    # GET /api/1.0/org_details/?org_type=practice&org=99H&keys=total_list_size
+    params = {
+        "q": query,
+        "format": "json"
+    }
+    op_request = requests.get(request_url, params=params)
+    op_request_dict = json.loads(op_request.text)
+    if len(op_request_dict) > 1:
+        print(f"The query returned more than 1 bnf, automatically choosing the first bnf which is {op_request_dict[0]['name']}")
         op_request_dict = op_request_dict[0]
     elif len(op_request_dict) == 0:
         raise Exception(f"Query {query} returned no results, perhaps the query was missspelled.")
