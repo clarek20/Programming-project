@@ -20,3 +20,4 @@ make_heatmap.py is an interactive that script that allows you to generate heatma
 
 Boxplot.ipynb contains a script that will generate a boxplot for a given year showing trends across a clinical commisioning group (CCG).
 
+![Image of boxplot example](https://github.com/clarek20/Programming-project/raw/master/boxplot.png)

@@ -324,11 +324,8 @@ def plot_heatmap(df, year):
     """    
     fig, ax = plt.subplots(figsize=(10,30))  
     plot = sns.heatmap(df, cmap="coolwarm", ax=ax, linewidths=.5)
-    ax.set_title(f"Heatmap of prescriptions normalised to patient numbers from practices in the Manchester CCG in {year}")
+    ax.set_title(f"Heatmap of prescriptions normalised to patient numbers from \
+practices in the Manchester CCG in {year}")
     ax.set(ylabel = "Practice", xlabel = "Month")
     return plot
     
-
-
-
-
