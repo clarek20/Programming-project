@@ -12,7 +12,7 @@ In this repository, you will find two python scripts and 3 Jupyter notebooks. Be
 api<span>.py contains most of the functions that are called in the Jupyter notebooks, as well as in make_heatmap.py. All functions are commented and contain docstrings making them easily callable in your own scripts.
 
 #### make_heatmap.py
-make_heatmap.py is an interactive that script that allows you to generate heatmaps for a given year showing number of prescriptions on a colour scale. An example of a generated plot is shown below. Should be fairly self explanatory when ran however any issues please raise an issue on github.
+make_heatmap.py is an interactive that script that allows you to generate heatmaps for a given year showing number of prescriptions on a colour scale. An example of a generated plot is shown below. Should be fairly self explanatory when ran however any issues please raise an issue on github. Further information regarding the use of this script can be found in docs/make_heatmap_instructions.md
 
 ![Image of heatmap example](https://github.com/clarek20/Programming-project/raw/master/2018_14L_5.1.png)
 
