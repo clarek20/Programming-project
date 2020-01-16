@@ -94,6 +94,7 @@ def get_merged_dataframe(org, code):
     list_size_df = op_request_to_dataframe(get_list_size(org))
     # Merge the dataframe and return it
     result = pd.merge(n_items_df, list_size_df)
+    result['items_per_patient'] = result['items'] / result['total_list_size']
     return result
 
 def get_practice_info(query):
